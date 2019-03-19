@@ -1,0 +1,21 @@
+#lang racket
+
+(define (voisins noeud paires)
+  (if (equal? paires '())
+      '()
+      (if (equal? (car noeud) (caar paires))
+          (cons (cadar paires) (voisins noeud (cdr paires)))
+          (if (equal? (car noeud) (cadar paires))
+              (cons (caar paires) (voisins noeud (cdr paires)))
+              (voisins noeud (cdr paires))
+              )
+          )
+      )
+)
+
+(define (transformer noeuds paires)
+  (if (equal? noeuds '())
+      '()
+      (cons (voisins (car noeuds) paires) (transformer (cdr noeuds) paires))
+      )
+)
