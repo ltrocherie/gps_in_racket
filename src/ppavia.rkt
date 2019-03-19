@@ -23,6 +23,59 @@
       (roam-node (cdr t)))
   t)
 )
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;teste si l'en-tête de liste correspond au tag passé en paramètre
+(define (tag? tag l)
+  (equal? (car l) tag))
 
-(roam-node (xml->xexpr (document-element
-    (read-xml (open-input-file "../maps/forrest.osm")))))
+
+;;teste si la ligne tag passée en paramètre correspond à une highway
+(define (highway-tag? l)
+  (equal? (car (cdaadr  l)) "highway"))
+
+;;
+(define (highway-list? w)
+  (if (and (list? (car w)) (tag? 'tag (car w)))
+      (highway-tag? (car w))
+      (highway-list? (cdr w)))
+  )
+
+(define (highway? w)
+  (highway-list? (cddr w)))
+
+;;construit la liste de segments à partir d'un osm
+(define (roam-way t)
+  (if (not (equal? '() t))
+      (if (and (list? (car t)) (equal? (caar t) 'way))
+          (cons (car t) (roam-way (cdr t)))
+          (roam-way (cdr t)))
+  t)
+  )
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;(xml->xexpr (document-element
+  ;;  (read-xml (open-input-file "../maps/projMapping.osm"))))
+
+;;(roam-node (xml->xexpr (document-element
+  ;;  (read-xml (open-input-file "../maps/forrest.osm")))))
+
+;;(roam-way (xml->xexpr (document-element
+  ;;                      (read-xml (open-input-file "../maps/projMapping.osm")))))
+(define w '(way
+   ((id "199797372"))
+   "\n    "
+   (nd ((ref "2097959544")))
+   "\n    "
+   (nd ((ref "515330686")))
+   "\n    "
+   (tag ((k "highway") (v "tertiary")))
+   "\n  "))
+
+(cddr w)
+
+(highway? w)
+
+
+
