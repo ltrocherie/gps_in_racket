@@ -27,7 +27,7 @@
 (define (all_ways beg succ end l previous)
   (cond [(occ previous) '()]
         [(= beg end) (list previous)]
-        [(not (null? succ)) (append (all_ways (car succ) (cadr (assoc (car succ) l)) end l (append previous (list (car succ))))
+        [(not (null? succ)) (append (all_ways (car succ) (caddr (assoc (car succ) l)) end l (append previous (list (car succ))))
                                     (all_ways beg (cdr succ) end l previous))]
         [else '()]))
 
@@ -43,13 +43,14 @@
 ;renvoie un itinéraire (succession de noeuds) reliant beg et end
 ;s'il en existe, '() sinon
 (define (one_way beg end l)
-  (if (null? (all_ways beg (cadr (assoc beg l)) end l (list beg)))
+  (if (null? (all_ways beg (caddr (assoc beg l)) end l (list beg)))
       '()
-      (car (all_ways beg (cadr (assoc beg l)) end l (list beg)))))
+      (car (all_ways beg (caddr (assoc beg l)) end l (list beg)))))
       
 
 ;(one_way 1 5 '((1 (2 4)) (2 (1 3 4)) (3 (2 5)) (4 (1 2 5)) (5 (3 4))))
 ;(one_way 1 6 '((1 (2 4)) (2 (1 3 4)) (3 (2 5)) (4 (1 2 5)) (5 (3 4)) (6 (7 8))))
+;(one_way 1 5 '((1 (0 0) (2 4)) (2 (1 0) (1 3 4)) (3 (1 1) (2 5)) (4 (2 1) (1 2 5)) (5 (1 2) (3 4))))
 
 ;renvoie l'itinéraire (succession de noeuds) passant par le moins de noeuds
 ;possible reliant beg et end s'il existe, '() sinon
