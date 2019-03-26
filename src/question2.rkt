@@ -63,12 +63,34 @@
       liste
       (remove_nodes_deg2 (concat_neighbourS (car nodes_deg2_liste) (remove (assoc (caar nodes_deg2_liste) liste) liste))
                          (cdr nodes_deg2_liste))))
+;;Precond: node un noeud
+;;Postcond: un bouleen
+;;Action: retourne #t si node est de degre0 et #f sinon
+;;exemple: (is_deg2 '(5 (0.1 6) ())) --> #t et (is_deg2 '(5 (0.1 6) (1 4))) --> #f
+(define (is_deg0? node)
+  (if (= (length (caddr node)) 0)
+      #t
+      #f))
+
+
+;;Precond: une liste representant la structure graphe
+;;Poscond: une liste representant la structure graphe
+;;Action: retire tous les noeuds de degre 0
+;;exemple: (remove_nodes_deg0 '((1 (1 5) ()) (3 (0.7 4) (2 4 7)))) --> ((1 (1 5) ()))
+(define (remove_nodes_deg0 liste)
+  (if (null? liste)
+      '()
+      (if (is_deg0? (car liste))
+          (remove_nodes_deg0 (cdr liste))
+          (cons (car liste) (remove_nodes_deg0 (cdr liste))))))
 
 
 ;;Precond: l une liste de noeuds
 ;;Postcond: une liste de noeuds
-;;Action: supprime d'une liste fournie tous des noeuds de degre 2 sans qu'on fournisse la liste de ces noeuds en parametre
-;;exemple: (remove_nodes_deg2 '((1 (1 5) (2)) (3 (0.7 4) (2 4 7)) (4 (11 0.9) (3 5 9)) (7 (6 4) (6 3)) (5 (1 8.0) (4 6)) (6 (12 45) (5 7)) (2 (3 0) (1 3))))
+;;Action: supprime d'une liste fournie tous des noeuds de degre 2 (sans qu'on fournisse la liste de ces noeuds en parametre)
+;;        et ceux de degre 0.
+;;exemple: (remove_nodes_deg2 '((1 (1 5) (2)) (3 (0.7 4) (2 4 7)) (4 (11 0.9) (3 5 9)) (7 (6 4) (6 3)) (5 (1 8.0) (4 6)) (6 (12 45) (5 7)) (2 (3 0) (1 3)) (9 (4 5) ()))
                         ;;--> '((3 (0.7 4) (1 6 4)) (1 (1 5) (3)) (4 (11 0.9) (6 3 9)))
-(define (graph_without_deg2_nodes l)
-  (remove_nodes_deg2 l (nodes_deg2 l)))
+(define (graph_without_nodes_deg0&2_nodes l)
+  (remove_nodes_deg0 (remove_nodes_deg2 l (nodes_deg2 l))))
+
