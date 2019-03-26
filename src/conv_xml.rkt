@@ -70,8 +70,29 @@
           (append (way-to-pairs (car t)) (roam-way (cdr t)))
           (roam-way (cdr t)))
   t)
-  )
+)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;construit une liste de noeuds avec successeurs à partir d'une liste de noeuds et d'une liste d'arcs
+(define (append-succs noeuds paires)
+  (if (equal? noeuds '())
+      '()
+      (cons (list (caar noeuds) (cdar noeuds) (voisins (car noeuds) paires)) (append-succs (cdr noeuds) paires))
+      )
+)
+
+(define (voisins noeud paires)
+  (if (equal? paires '())
+      '()
+      (if (equal? (car noeud) (caar paires))
+          (cons (cadar paires) (voisins noeud (cdr paires)))
+          (if (equal? (car noeud) (cadar paires))
+              (cons (caar paires) (voisins noeud (cdr paires)))
+              (voisins noeud (cdr paires))
+              )
+          )
+      )
+)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -104,6 +125,5 @@
 (define n1 '(nd ((ref "2097959544"))))
 (define n2 '(nd ((ref "515330686"))))
 
-(roam-way t)
-
-
+;(voisins '(1124048441 356 286) (roam-way t))
+(append-succs (roam-node t) (roam-way t))
