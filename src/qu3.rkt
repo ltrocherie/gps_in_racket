@@ -1,4 +1,5 @@
 #lang racket
+(provide one_way)
 
 ;renvoie #t si n est dans la liste l, #f sinon
 (define (is_in_list n l) 
@@ -57,9 +58,3 @@
 ;(define (least_nodes_way beg end l res)
 ;  (if (null? (all_ways beg (cadr (assoc beg l)) end l (list beg)))
 ;      '()
-      
-  
-
-
-      
-

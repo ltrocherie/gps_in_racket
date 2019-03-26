@@ -1,6 +1,8 @@
 #lang racket
 (require xml)
 
+(provide append-succs roam-node roam-way)
+
 ;prend un morceau osm contenant id lat et long et renvoie le triplet de nombres correspondant
 (define (create-node l) (list (extract-tag 'id (car l)) (extract-tag 'lat (car l)) (extract-tag 'lon (car l))))
 
@@ -14,6 +16,12 @@
 
 ;prend un coupe symbole-string et traduit la string en nombre et renvoie ce nombre
 (define (convert-number l) (string->number (cadr l)))
+(define t (xml->xexpr (document-element
+                       (read-xml (open-input-file "../maps/forrest.osm")))))
+
+
+
+(append-succs (roam-node t) (roam-way t))
 
 ;parcourt une liste osm et renvoie la liste des nodes, formatés correctement
 (define (roam-node t)
@@ -126,4 +134,4 @@
 (define n2 '(nd ((ref "515330686"))))
 
 ;(voisins '(1124048441 356 286) (roam-way t))
-(append-succs (roam-node t) (roam-way t))
+;(append-succs (roam-node t) (roam-way t))
