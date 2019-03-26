@@ -89,8 +89,9 @@
 ;;Postcond: une liste de noeuds
 ;;Action: supprime d'une liste fournie tous des noeuds de degre 2 (sans qu'on fournisse la liste de ces noeuds en parametre)
 ;;        et ceux de degre 0.
-;;exemple: (remove_nodes_deg2 '((1 (1 5) (2)) (3 (0.7 4) (2 4 7)) (4 (11 0.9) (3 5 9)) (7 (6 4) (6 3)) (5 (1 8.0) (4 6)) (6 (12 45) (5 7)) (2 (3 0) (1 3)) (9 (4 5) ()))
+;;exemple: (graph_without_nodes_deg0&2_nodes '((1 (1 5) (2)) (3 (0.7 4) (2 4 7)) (4 (11 0.9) (3 5 9)) (7 (6 4) (6 3)) (5 (1 8.0) (4 6)) (6 (12 45) (5 7)) (2 (3 0) (1 3)) (9 (4 5) ()))
                         ;;--> '((3 (0.7 4) (1 6 4)) (1 (1 5) (3)) (4 (11 0.9) (6 3 9)))
 (define (graph_without_nodes_deg0&2_nodes l)
   (remove_nodes_deg0 (remove_nodes_deg2 l (nodes_deg2 l))))
+
 
