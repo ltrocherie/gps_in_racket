@@ -1,0 +1,30 @@
+#lang racket
+
+;renvoie #t si n est dans la liste l, #f sinon
+(define (is_in_list n l) 
+  (if (null? l)
+      #f
+      (or (= n (car l)) (is_in_list n (cdr l)))))
+
+;renvoie #t si un des élément de l apparait au moins deux fois dans l, #f sinon
+(define (occ l)
+  (if (null? l)
+      #f
+      (or (is_in_list (car l) (cdr l)) (occ (cdr l)))))
+
+;cherche un chemin du noeud beg vers le noeud end dans l
+;renvoie #t s'il existe (il est alors conservé dans previous), #f sinon
+(define (search beg succ end l previous)
+  (cond [(occ previous) #f]
+        [(= beg end) #t]
+        [(null? succ) (or (search (car succ) (cadr (assoc (car succ) l)) end l (append previous (list (car succ)))) (search beg (cdr succ) end l previous))]
+        [else #f]))
+
+;(is_in_list 3 '(1 3 5 8))
+;(is_in_list 4 '(1 3 5 8))
+;(occ '(15 3 5 3))
+;(occ '(15 8 3 5))
+
+
+      
+
