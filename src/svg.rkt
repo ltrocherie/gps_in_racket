@@ -34,7 +34,7 @@
 
 
 (define (path-string node neighbours)
-      (string-append ()))
+      (string-append ))
       
       
 ;; An example of a page returning HTML with xexprs and macros
