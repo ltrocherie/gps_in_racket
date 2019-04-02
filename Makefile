@@ -2,8 +2,8 @@
 
 all: test
 
+build:
+	(cd src && racket *.rkt)
 
 test:
-	(cd src && racket conv_xml.rkt)
-	(cd src && racket question2.rkt)
-	(cd src && racket qu3.rkt)
+	(cd src && racket *tests.rkt)
