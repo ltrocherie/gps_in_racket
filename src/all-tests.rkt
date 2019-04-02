@@ -1,18 +1,18 @@
 #lang racket
-(require "conv_xml.rkt")
-(require "question2.rkt")
+(require "../src/conv_xml.rkt")
+(require "../src/question2.rkt")
 (require xml)
 
 (printf "Test de l'ouverture d'un fichier xml\n")
 (xml->xexpr (document-element
-             (read-xml (open-input-file "../maps/projMapping.osm"))))
+             (read-xml (open-input-file (or "maps/projMapping.osm" "work/maps/projMapping.osm")))))
 
 (printf "Test de roam-node\n")
 (roam-node (xml->xexpr (document-element
-                        (read-xml (open-input-file "../maps/forrest.osm")))))
-
+                        (read-xml (open-input-file (or "maps/projMapping.osm" "maps/projMapping.osm"))))))
+                                                       
 (define t (xml->xexpr (document-element
-                       (read-xml (open-input-file "../maps/forrest.osm")))))
+                       (read-xml (open-input-file (or "maps/projMapping.osm" "maps/projMapping.osm"))))))
 (define w '(way
    ((id "199797372"))
    "\n    "
@@ -40,4 +40,4 @@
 (voisins '(1124048441 356 286) (roam-way t))
 
 (printf "Test de graph_without_nodes_deg0&2\n")
-(graph_without_nodes_deg0&2 (append-succs (roam-node t) (roam-way t)))
+(graph_without_nodes_deg0&2_nodes (append-succs (roam-node t) (roam-way t)))
