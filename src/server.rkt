@@ -4,6 +4,9 @@
 (require web-server/servlet
          web-server/servlet-env)
 
+;requires internes
+(require "interprete.rkt")
+
 ;; An example of a page returning TEXT with calls to fprintf
 (define (main-page req)
   (response/output
@@ -21,12 +24,19 @@
               (pre ,(format "~a" (request-bindings req)))))))
 
 
+;; fonction qui s'appelle quand on cherche l'URL route, qui interprète la
+;; source et la destination demandée et qui affiche ce que renvoie (route start end)
+(define (route-page req)
+  (let ([listargs (request-bindings req)])
+    (route (string->number (format "~a" (cdr (assoc 'start listargs)))) (string->number (format "~a" (cdr (assoc 'end listargs)))))))
+
 ;; Routing function
 ;;     /display          --->   display-page
 ;;     everything else   --->   main-page
 (define-values (server-dispatch server-url)
     (dispatch-rules
      [("display") display-page]
+     [("route") route-page]
      [else main-page]))
 
 (serve/servlet server-dispatch

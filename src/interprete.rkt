@@ -10,6 +10,8 @@
 (require xml)
 (require web-server/servlet)
 
+(provide route)
+
 ;en attendant d'avoie la fonction qui renvoie du response/xexpr
 ;avec le chemin demandé
 (define (aff_graph a b) #f)
@@ -41,7 +43,7 @@
   )
 
 (define t (xml->xexpr (document-element
-                       (read-xml (open-input-file "../maps/forrest.osm")))))
+                       (read-xml (open-input-file "../maps/forrest-testloop.osm")))))
 (define data (append-succs (roam-node t) (roam-way t)))
 
 ;(define (distance start end))
