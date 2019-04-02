@@ -5,14 +5,14 @@
 
 (printf "Test de l'ouverture d'un fichier xml\n")
 (xml->xexpr (document-element
-             (read-xml (open-input-file "../maps/projMapping.osm"))))
+             (read-xml (open-input-file (or "./../maps/projMapping.osm" "work/maps/projMapping.osm")))))
 
 (printf "Test de roam-node\n")
 (roam-node (xml->xexpr (document-element
-                        (read-xml (open-input-file "../maps/forrest.osm")))))
-
+                        (read-xml (open-input-file (or "./../maps/projMapping.osm" "maps/projMapping.osm"))))))
+                                                       
 (define t (xml->xexpr (document-element
-                       (read-xml (open-input-file "../maps/forrest.osm")))))
+                       (read-xml (open-input-file (or "./../maps/projMapping.osm" "maps/projMapping.osm"))))))
 (define w '(way
    ((id "199797372"))
    "\n    "
