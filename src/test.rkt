@@ -1,5 +1,6 @@
 #lang racket
 (require "conv_xml.rkt")
+(require "question2.rkt")
 (require xml)
 
 (printf "Test de l'ouverture d'un fichier xml\n")
@@ -37,3 +38,6 @@
 (append-succs (roam-node t) (roam-way t))
 (printf "Test de voisins\n")
 (voisins '(1124048441 356 286) (roam-way t))
+
+(printf "Test de graph_without_nodes_deg0&2\n")
+(graph_without_nodes_deg0&2 (append-succs (roam-node t) (roam-way t)))
