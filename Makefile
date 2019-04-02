@@ -6,4 +6,4 @@ build:
 	(cd src && racket *.rkt)
 
 test:
-	(cd src && racket *tests.rkt)
+	racket tst/all-tests.rkt
