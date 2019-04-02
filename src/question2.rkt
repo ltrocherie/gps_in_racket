@@ -62,7 +62,7 @@
   (if (null? nodes_deg2_liste)
       liste
       (remove_nodes_deg2 (concat_neighbourS (car nodes_deg2_liste) (remove (assoc (caar nodes_deg2_liste) liste) liste))
-                         (cdr nodes_deg2_liste))))
+                         ((nodes_deg2 (concat_neighbourS (car nodes_deg2_liste) (remove (assoc (caar nodes_deg2_liste) liste) liste)))))))
 ;;Precond: node un noeud
 ;;Postcond: un bouleen
 ;;Action: retourne #t si node est de degre0 et #f sinon
