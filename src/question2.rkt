@@ -94,4 +94,6 @@
 (define (graph_without_nodes_deg0&2_nodes l)
   (remove_nodes_deg0 (remove_nodes_deg2 l (nodes_deg2 l))))
 
+(provide graph_without_nodes_deg0&2_nodes)
+
 

@@ -40,4 +40,4 @@
 (voisins '(1124048441 356 286) (roam-way t))
 
 (printf "Test de graph_without_nodes_deg0&2\n")
-(graph_without_nodes_deg0&2 (append-succs (roam-node t) (roam-way t)))
+(graph_without_nodes_deg0&2_nodes (append-succs (roam-node t) (roam-way t)))
