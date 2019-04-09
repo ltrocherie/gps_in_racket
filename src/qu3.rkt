@@ -1,6 +1,10 @@
 #lang racket
 (provide one_way)
 
+;renvoie le carré de x
+(define (square x)
+  (* x x))
+
 ;renvoie #t si n est dans la liste l, #f sinon
 (define (is_in_list n l) 
   (if (null? l)
@@ -32,8 +36,8 @@
                                     (all_ways beg (cdr succ) end l previous))]
         [else '()]))
 
-;(all_ways 1 '(2 4) 5 '((1 (2 4)) (2 (1 3 4)) (3 (2 5)) (4 (1 2 5)) (5 (3 4))) '(1))
-;(all_ways 1 '(2 4) 6 '((1 (2 4)) (2 (1 3 4)) (3 (2 5)) (4 (1 2 5)) (5 (3 4)) (6 (7 8))) '(1))
+;(all_ways 1 '(2 4) 5 '((1 (0 1) (2 4)) (2 (2 3)(1 3 4)) (3 (2 1) (2 5)) (4 (1 2) (1 2 5)) (5 (2 5) (3 4))) '(1))
+;(all_ways 1 '(2 4) 6 '((1 (0 1) (2 4)) (2 (2 3)(1 3 4)) (3 (2 1) (2 5)) (4 (1 2) (1 2 5)) (5 (2 5) (3 4)) (6 (1 8) (7 8))) '(1))
 
 ;le nombre de chemins calculés pouvant rapidement devenir très important en
 ;augmentant le nombre de noeuds dans l, une version contenant le nombre de
@@ -49,12 +53,43 @@
       (car (all_ways beg (caddr (assoc beg l)) end l (list beg)))))
       
 
-;(one_way 1 5 '((1 (2 4)) (2 (1 3 4)) (3 (2 5)) (4 (1 2 5)) (5 (3 4))))
-;(one_way 1 6 '((1 (2 4)) (2 (1 3 4)) (3 (2 5)) (4 (1 2 5)) (5 (3 4)) (6 (7 8))))
-;(one_way 1 5 '((1 (0 0) (2 4)) (2 (1 0) (1 3 4)) (3 (1 1) (2 5)) (4 (2 1) (1 2 5)) (5 (1 2) (3 4))))
+;(one_way 1 5 '((1 (0 1) (2 4)) (2 (2 3)(1 3 4)) (3 (2 1) (2 5)) (4 (1 2) (1 2 5)) (5 (2 5) (3 4))))
+;(one_way 1 6 '((1 (0 1) (2 4)) (2 (2 3)(1 3 4)) (3 (2 1) (2 5)) (4 (1 2) (1 2 5)) (5 (2 5) (3 4)) (6 (7 8))))
 
-;renvoie l'itinéraire (succession de noeuds) passant par le moins de noeuds
-;possible reliant beg et end s'il existe, '() sinon
-;(define (least_nodes_way beg end l res)
-;  (if (null? (all_ways beg (cadr (assoc beg l)) end l (list beg)))
-;      '()
+;renvoie #t si n est dans la liste de couples l, #f sinon
+(define (is_in_list2 n l) 
+  (if (null? l)
+      #f
+      (or (= n (caar l)) (= n (cadar l)) (is_in_list2 n (cdr l)))))
+
+;(is_in_list2 3 '((4 2) (2 4) (2 3)))
+;(is_in_list2 3 '((4 2) (5 1) (3 5)))
+;(is_in_list2 6 '((4 2) (5 1) (3 5)))
+
+;renvoie la distance entre deux noeuds successifs de l
+(define (dist_succ a b l)
+  (sqrt (+ (square (- (caadr (assoc a l)) (caadr (assoc b l)))) (square (- (cadadr (assoc a l)) (cadadr (assoc b l)))))))
+
+;(dist_succ 1 2 '((1 (0 0) (2 3 4)) (2 (5 3) (1 3 4))))
+
+;renvoie le noeud le plus proche de a parmis ses successeurs dans l, 0 sinon
+;doit être appelé avec min = '(car succ)
+(define (nearest a succ l min)
+  (cond [(null? succ) (car min)]
+        [(< (dist_succ a (car succ) l) (dist_succ a (car min) l)) (nearest a (cdr succ) l (cons (car succ) min))]
+        [else (nearest a (cdr succ) l min)]))
+
+;(nearest 1 '(2 3 4) '((1 (0 0) (2 3 4)) (2 (2 0) (1)) (3 (1 1) (1)) (4 (1 3) (1))) '(2))
+
+;renvoie un chemin reliant beg et end dans l
+;(define (find_way beg succ end l previous)
+ ; (cond [(null? succ) ]
+  ;       [(is_in_list end succ) (cons (list end beg))]
+   ;     [
+
+        
+;        [(< (+ d (dist_succ beg (nearest beg succ l '(car succ)) l)) dmax)
+ ;        (find_way (nearest beg succ l '(car succ)) (caddr (assoc (nearest beg succ l '(car succ)) l))
+  ;                 end l (cons (list (nearest beg succ l '(car succ)) beg) previous)
+   ;                (+ d (dist_succ beg (nearest beg succ l '(car succ)) l)) dmax)
+         

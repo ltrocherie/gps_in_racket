@@ -14,7 +14,8 @@
 
 ;en attendant d'avoie la fonction qui renvoie du response/xexpr
 ;avec le chemin demandé
-(define (aff_graph a b) #f)
+(define (aff_graph a b) (and (any/c a) (any/c b)))
+;  #f)
 
 ;cherche un chemin entre les points start et end
 ;si le chemin existe, elle renvoie un response/xexpr avec le code HTML SVG
@@ -37,13 +38,14 @@
       l
       (if (null? (cdr l))
           (cdr l)
-          (cons (list (search-cord (car l)) (list (search-cord (cadr l)))) (shapeshift (cdr l)))
+          (cons (list (search-cord (car l) data) (list (search-cord (cadr l) data))) (shapeshift (cdr l)))
           )
       )
   )
 
 (define t (xml->xexpr (document-element
-                       (read-xml (open-input-file "../maps/forrest-testloop.osm")))))
+                       (read-xml (open-input-file (command-line #:args (filename) filename))))))
+;                       (read-xml (open-input-file "./maps/forrest-testloop.osm")))))
 (define data (append-succs (roam-node t) (roam-way t)))
 
 ;(define (distance start end))
