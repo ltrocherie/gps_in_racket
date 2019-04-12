@@ -1,7 +1,7 @@
 #lang racket
 (require xml)
 
-(provide append-succs roam-node roam-way voisins append-succs)
+(provide append-succs roam-node roam-way roam-bounds voisins append-succs)
 
 ;prend un morceau osm contenant id lat et long et renvoie le triplet de nombres correspondant
 (define (create-node l) (list (extract-tag 'id (car l)) (extract-tag 'lat (car l)) (extract-tag 'lon (car l))))
@@ -101,3 +101,20 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;prend un morceau osm contenant bounds maxlat, maxlon, minlat et minlong et renvoie la paire
+;pointée correspondant au tag passé en paramètre dans l'ordre min . max
+(define (create-bound tag l)
+  (if (equal? tag 'lat)
+      (cons (convert-number (car (cddadr l))) (convert-number (caadr l)))
+      (cons (convert-number (cadr (cddadr l))) (convert-number (cadadr l)))
+  ))
+
+;parcourt une liste osm et renvoie la liste des nodes, formatés correctement
+(define (roam-bounds t)
+  (if (not (equal? '() t))
+      (if (and (list? (car t)) (equal? (caar t) 'bounds))
+          (list (create-bound 'lat (car t)) (create-bound 'lon (car t)))
+      (roam-bounds (cdr t)))
+  t)
+)

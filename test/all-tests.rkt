@@ -3,9 +3,14 @@
 (require "../src/question2.rkt")
 (require xml)
 
-(printf "Test de l'ouverture d'un fichier xml\n")
+(printf "Test de l'ouverture d'un fichier xml basique\n")
 (xml->xexpr (document-element
              (read-xml (open-input-file (or "maps/projMapping.osm" "work/maps/projMapping.osm")))))
+
+(printf "Test de l'ouverture d'un fichier xml complexe\n")
+;(xml->xexpr (document-element
+ ;            (read-xml (open-input-file (or "maps/forrest.osm" "work/maps/forrest.osm")))))
+
 
 (printf "Test de roam-node\n")
 (roam-node (xml->xexpr (document-element
@@ -13,6 +18,10 @@
                                                        
 (define t (xml->xexpr (document-element
                        (read-xml (open-input-file (or "maps/projMapping.osm" "maps/projMapping.osm"))))))
+
+(printf "Test de roam-bounds\n")
+(roam-bounds t)
+
 (define w '(way
    ((id "199797372"))
    "\n    "
