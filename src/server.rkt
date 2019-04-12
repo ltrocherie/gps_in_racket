@@ -30,6 +30,18 @@
   (let ([listargs (request-bindings req)])
     (route (string->number (format "~a" (cdr (assoc 'start listargs)))) (string->number (format "~a" (cdr (assoc 'end listargs)))))))
 
+;;fonction appelée quand on cherche l'URL de la distance, qui interprète
+;; start et end et qui affiche la distance minimale qui les sépare
+(define (distance-page req)
+  (let ([listargs (request-bindings req)])
+    (distance (string->number (format "~a" (cdr (assoc 'start listargs)))) (string->number (format "~a" (cdr (assoc 'end listargs)))))))
+
+;;
+;;
+(define (cycle-page req)
+  (let ([listargs (request-bindings req)])
+    (cycle (map string->number (string-split (format "~a" (cdr (assoc 'nodes listargs))) ",")))))
+
 ;; Routing function
 ;;     /display          --->   display-page
 ;;     everything else   --->   main-page
@@ -37,6 +49,8 @@
     (dispatch-rules
      [("display") display-page]
      [("route") route-page]
+     [("distance") distance-page]
+     [("cycle") cycle-page]
      [else main-page]))
 
 (serve/servlet server-dispatch

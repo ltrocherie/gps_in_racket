@@ -11,18 +11,20 @@
 (require web-server/servlet)
 
 (provide route)
+(provide distance)
+(provide cycle)
 
-;en attendant d'avoie la fonction qui renvoie du response/xexpr
+;en attendant d'avoir la fonction qui renvoie du response/xexpr
 ;avec le chemin demandé
-(define (aff_graph a b) (and (any/c a) (any/c b)))
-;  #f)
+(define (aff_graph argue)
+  #f)
 
 ;cherche un chemin entre les points start et end
 ;si le chemin existe, elle renvoie un response/xexpr avec le code HTML SVG
 ;qui affiche le chemin
 ;sinon, elle affiche le message d'erreur demandé
 (define (route start end)
-  (let ([onwei (one_way start end data)])
+  (let ([onwei (one_way start end data)]);avec one_way la fonction qui trouve le chemin entre start et end à travers data
   (if (null? onwei)
       (response/output
         #:mime-type TEXT/HTML-MIME-TYPE
@@ -32,6 +34,18 @@
       (aff_graph (shapeshift onwei))
       )))
 
+;cherche le chemin le plus court entre start et end
+;renvoie sa distance en response/xexpr avec le code HTML SVG si il existe
+;renvoie le message d'erreur sinon
+(define (distance start end)
+  #t);à finir
+
+;cherche le cycle le plus court reliant tous les points de la liste nodes
+;affiche soit la représentation graphique de l'itinéraire circulaire
+;soit le message d'erreur
+(define (cycle nodes)
+  #t);à finir
+
 ;transforme une liste d'ID en liste de (coordonnées ((coordonnées du suivant)))
 (define (shapeshift l)
   (if (null? l)
@@ -39,9 +53,9 @@
       (if (null? (cdr l))
           (cdr l)
           (cons (list (search-cord (car l) data) (list (search-cord (cadr l) data))) (shapeshift (cdr l)))
-          )
       )
   )
+)
 
 (define t (xml->xexpr (document-element
                        (read-xml (open-input-file (command-line #:args (filename) filename))))))
