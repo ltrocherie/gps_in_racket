@@ -24,21 +24,34 @@
 ;qui affiche le chemin
 ;sinon, elle affiche le message d'erreur demandé
 (define (route start end)
-  (let ([onwei (one_way start end data)]);avec one_way la fonction qui trouve le chemin entre start et end à travers data
-  (if (null? onwei)
+  ;(let ([onwei (one_way start end data)]);avec one_way la fonction qui trouve le chemin entre start et end à travers data
+  (let ([findwei (find_way start end data)]);avec find_way la fonction qui trouve le chemin entre start et end à travers data
+  (if (null? findwei)
       (response/output
         #:mime-type TEXT/HTML-MIME-TYPE
         (lambda (out)
           (fprintf out "Disconnected Universe Error~n")
           ));renvoie l'erreur demandée
-      (aff_graph (shapeshift onwei))
+      (aff_graph (shapeshift (cdr findwei)))
       )))
 
 ;cherche le chemin le plus court entre start et end
 ;renvoie sa distance en response/xexpr avec le code HTML SVG si il existe
 ;renvoie le message d'erreur sinon
 (define (distance start end)
-  #t);à finir
+  (let ([findwei (find_way start end data)]);avec find_way la fonction qui trouve le chemin entre start et end à travers data
+  (if (null? findwei)
+      (response/output
+        #:mime-type TEXT/HTML-MIME-TYPE
+        (lambda (out)
+          (fprintf out "Disconnected Universe Error~n")
+          ));renvoie l'erreur demandée
+      (response/output
+        #:mime-type TEXT/HTML-MIME-TYPE
+        (lambda (out)
+          (fprintf out (string-append "La distance demandée est : " (number->string (car findwei)) "."))
+          ));renvoie la distance demandée
+      )))
 
 ;cherche le cycle le plus court reliant tous les points de la liste nodes
 ;affiche soit la représentation graphique de l'itinéraire circulaire

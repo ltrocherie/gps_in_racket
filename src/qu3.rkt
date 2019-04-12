@@ -1,6 +1,6 @@
 #lang racket
 
-;(provide find_way)
+(provide find_way)
 
 ;renvoie le carré de x
 (define (square x)
