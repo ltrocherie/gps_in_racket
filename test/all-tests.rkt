@@ -8,8 +8,8 @@
              (read-xml (open-input-file (or "maps/projMapping.osm" "work/maps/projMapping.osm")))))
 
 (printf "Test de l'ouverture d'un fichier xml complexe\n")
-;(xml->xexpr (document-element
- ;            (read-xml (open-input-file (or "maps/forrest.osm" "work/maps/forrest.osm")))))
+(xml->xexpr (document-element
+             (read-xml (open-input-file (or "maps/forrest.osm" "work/maps/forrest.osm")))))
 
 
 (printf "Test de roam-node\n")
@@ -18,6 +18,9 @@
                                                        
 (define t (xml->xexpr (document-element
                        (read-xml (open-input-file (or "maps/projMapping.osm" "maps/projMapping.osm"))))))
+
+(define fr (xml->xexpr (document-element
+                       (read-xml (open-input-file (or "maps/forrest.osm" "maps/forrest.osm"))))))
 
 (printf "Test de roam-bounds\n")
 (roam-bounds t)
@@ -43,8 +46,12 @@
 (define n1 '(nd ((ref "2097959544"))))
 (define n2 '(nd ((ref "515330686"))))
 
-(printf "Test de append-succ\n")
+(printf "Test de append-succ sur un fichier osm simple\n")
 (append-succs (roam-node t) (roam-way t))
+
+(printf "Test de append-succ sur un fichier osm complexe\n")
+(append-succs (roam-node fr) (roam-way fr))
+
 (printf "Test de voisins\n")
 (voisins '(1124048441 356 286) (roam-way t))
 

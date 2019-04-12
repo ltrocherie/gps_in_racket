@@ -110,7 +110,8 @@
       (cons (convert-number (cadr (cddadr l))) (convert-number (cadadr l)))
   ))
 
-;parcourt une liste osm et renvoie la liste des nodes, formatés correctement
+;parcourt une liste osm et renvoie une liste de deux paires pointées,
+;la première étant (minlat . maxlat) et la deuxième (minlon . maxlon)
 (define (roam-bounds t)
   (if (not (equal? '() t))
       (if (and (list? (car t)) (equal? (caar t) 'bounds))
