@@ -1,5 +1,6 @@
 #lang racket
-(provide one_way)
+
+;(provide find_way)
 
 ;renvoie le carré de x
 (define (square x)
@@ -56,16 +57,6 @@
 ;(one_way 1 5 '((1 (0 1) (2 4)) (2 (2 3)(1 3 4)) (3 (2 1) (2 5)) (4 (1 2) (1 2 5)) (5 (2 5) (3 4))))
 ;(one_way 1 6 '((1 (0 1) (2 4)) (2 (2 3)(1 3 4)) (3 (2 1) (2 5)) (4 (1 2) (1 2 5)) (5 (2 5) (3 4)) (6 (7 8))))
 
-;renvoie #t si n est dans la liste de couples l, #f sinon
-(define (is_in_list2 n l) 
-  (if (null? l)
-      #f
-      (or (= n (caar l)) (= n (cadar l)) (is_in_list2 n (cdr l)))))
-
-;(is_in_list2 3 '((4 2) (2 4) (2 3)))
-;(is_in_list2 3 '((4 2) (5 1) (3 5)))
-;(is_in_list2 6 '((4 2) (5 1) (3 5)))
-
 ;renvoie la distance entre deux noeuds successifs de l
 (define (dist_succ a b l)
   (sqrt (+ (square (- (caadr (assoc a l)) (caadr (assoc b l)))) (square (- (cadadr (assoc a l)) (cadadr (assoc b l)))))))
@@ -81,15 +72,43 @@
 
 ;(nearest 1 '(2 3 4) '((1 (0 0) (2 3 4)) (2 (2 0) (1)) (3 (1 1) (1)) (4 (1 3) (1))) '(2))
 
-;renvoie un chemin reliant beg et end dans l
-;(define (find_way beg succ end l previous)
- ; (cond [(null? succ) ]
-  ;       [(is_in_list end succ) (cons (list end beg))]
-   ;     [
+;renvoie #t si le nd n est dans la liste previous associée à l, #f sinon
+(define (is_in_list2 n l) 
+  (if (null? l)
+      #f
+      (if (= n (caar l))
+          #t
+          (is_in_list2 n (cdr l)))))
 
-        
-;        [(< (+ d (dist_succ beg (nearest beg succ l '(car succ)) l)) dmax)
- ;        (find_way (nearest beg succ l '(car succ)) (caddr (assoc (nearest beg succ l '(car succ)) l))
-  ;                 end l (cons (list (nearest beg succ l '(car succ)) beg) previous)
-   ;                (+ d (dist_succ beg (nearest beg succ l '(car succ)) l)) dmax)
-         
+;(is_in_list2 3 '((4 2) (2 4) (2 3)))
+;(is_in_list2 3 '((4 2) (5 1) (3 5)))
+;(is_in_list2 6 '((4 2) (5 1) (3 5)))
+
+;(define l '((1 (0 0) (2 3 4)) (2 (2 0) (1)) (3 (1 1) (1)) (4 (1 3) (1))))
+;(display (caddr (assoc 1 l)))
+
+;renvoie le triplé (nd, dist, prev_nd) du prochain noeud à utiliser dans find_way (Djikstra)
+;s'initialise avec nodes='() et res=(car previous)
+(define (next previous nodes res)
+  (if (null? previous)
+      (car res)
+      (if (and (> (cadar previous) (cadr res)) (not (is_in_list (caar previous) nodes)))
+          (next (cdr previous) (append nodes (cddar previous)) (car previous))
+          (next (cdr previous) (append nodes (cddar previous)) res))))  
+
+;renvoie le chemin le plus court reliant beg et end dans l
+;s'initialise avec nd=beg et previous='((beg 0 beg))
+(define (find_way_fct beg nd succ end l previous)
+  (cond [(and (is_in_list2 end previous) (= (next previous '() (car previous)) end)) previous] 
+        [(null? succ) (find_way_fct beg (next previous '() (car previous)) (caddr (assoc (next previous '() (car previous)) l)) end l previous)]
+        [(is_in_list2 (car succ) previous) (find_way_fct beg nd (cdr succ) end l previous)]
+        [else (find_way_fct beg nd (cdr succ) end l (cons (list (car succ) (+ (dist_succ nd (car succ) l) (cadr (assoc nd previous))) nd) previous))]))
+
+;(find_way_fct 1 1 '(2 4) 5 '((1 (0 1) (2 4)) (2 (2 3)(1 3 4)) (3 (2 1) (2 5)) (4 (1 2) (1 2 5)) (5 (2 5) (3 4))) '((1 0 1)))
+
+(define (find_way beg end l)
+  (find_way_fct beg beg (caddr (assoc beg l)) end l (list (list beg 0 beg))))
+  ;(list (cadr (assoc end (find_way_fct beg beg (caddr (assoc beg l)) end l (list (list beg 0 beg))))) (reverse (map car (find_way_fct beg beg (caddr (assoc beg l)) end l (list (list beg 0 beg)))))))
+
+;(find_way 1 5 '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2) (1 2 5)) (5 (2 5) (2 4))))
+;PAS ENCORE LE MEILLEUR CHEMIN, REVOIR FIND_WAY_FCT  
