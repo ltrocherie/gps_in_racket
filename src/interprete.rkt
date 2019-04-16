@@ -24,7 +24,7 @@
 
 ;affiche la map vide
 (define (aff_blank_graph)
-  (create_html_response "OPEN MAPPING SERVICE REAL DISPLAY PAGE" "800" "800" data (roam-bounds t) "black")
+  (create_html_response "OPEN MAPPING SERVICE EMPTY MAP DISPLAY PAGE" "800" "800" data (roam-bounds t) "black")
 )
 
 ;cherche un chemin entre les points start et end
