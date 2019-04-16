@@ -19,13 +19,25 @@
 ;en attendant d'avoir la fonction qui renvoie du response/xexpr
 ;avec le chemin demandé
 (define (aff_graph argue)
-  (create_html_responses "OPEN MAPPING SERVICE REAL DISPLAY PAGE" "800" "800" data argue (roam-bounds t) "black" "red")
-)
+  (response/xexpr (create_html_responses "OPEN MAPPING SERVICE REAL DISPLAY PAGE" "800" "800" data argue (roam-bounds t) "black" "red")
+))
 
 ;affiche la map vide
 (define (aff_blank_graph)
-  (create_html_response "OPEN MAPPING SERVICE EMPTY MAP DISPLAY PAGE" "800" "800" data (roam-bounds t) "black")
+  (response/xexpr (create_html_response "OPEN MAPPING SERVICE REAL DISPLAY PAGE" "800" "800" data (roam-bounds t) "black"))
 )
+
+(define (vertex-new id coord neigh)
+  (list id coord neigh))
+
+(define (follower i l)
+  (let ((res (member i l)))
+    (if (null? (cdr res))
+        '()
+        (list (cadr res)))))
+
+(define (conv-graph l g)
+  (map (lambda (n) (vertex-new n (cadr (assoc n g)) (follower n l))) l))
 
 ;cherche un chemin entre les points start et end
 ;si le chemin existe, elle renvoie un response/xexpr avec le code HTML SVG
@@ -41,7 +53,7 @@
            (fprintf out "Disconnected Universe Error~n")
            ));renvoie l'erreur demandée
         ;(aff_graph (shapeshift (cdr findwei)))
-        (aff_graph (cadr findwei)) ;maintenant le cdr est sous la forme graph
+        (aff_graph (conv-graph (cadr findwei) data)) ;maintenant le cdr est sous la forme graph
         )))
 
 ;cherche le chemin le plus court entre start et end
@@ -82,4 +94,4 @@
 (define t (xml->xexpr (document-element
                        (read-xml (open-input-file (command-line #:args (filename) filename))))))
                        ;(read-xml (open-input-file "./maps/forrest-testloop.osm")))))
-(define data (graph_without_nodes_deg0&2_nodes (append-succs (roam-node t) (roam-way t))))
+(define data (append-succs (roam-node t) (roam-way t)))
