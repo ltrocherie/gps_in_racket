@@ -115,7 +115,7 @@
 (define (create_html_responses title width height graph1 graph2 bounds color1 color2)
   (list 'html
         (list 'head (list 'title title))
-        (list 'body (create-svg width height graph1 graph2 bounds color1 color2))))
+        (list 'body (create-svg2 width height graph1 graph2 bounds color1 color2))))
 (create_html_response "OPEN MAPPING SERVICE DISPLAY PAGE" "800" "800" data (roam-bounds t) "blue")
 
 ;test
