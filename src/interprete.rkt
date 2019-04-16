@@ -14,11 +14,17 @@
 (provide route)
 (provide distance)
 (provide cycle)
+(provide aff_blank_graph)
 
 ;en attendant d'avoir la fonction qui renvoie du response/xexpr
 ;avec le chemin demandé
 (define (aff_graph argue)
   (create_html_responses "OPEN MAPPING SERVICE REAL DISPLAY PAGE" "800" "800" data argue (roam-bounds t) "black" "red")
+)
+
+;affiche la map vide
+(define (aff_blank_graph)
+  (create_html_response "OPEN MAPPING SERVICE REAL DISPLAY PAGE" "800" "800" data (roam-bounds t) "black")
 )
 
 ;cherche un chemin entre les points start et end

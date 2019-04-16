@@ -8,12 +8,14 @@
 (require "interprete.rkt")
 
 ;; An example of a page returning TEXT with calls to fprintf
+;; affiche maintenant la map vide en entier
 (define (main-page req)
-  (response/output
-    #:mime-type TEXT/HTML-MIME-TYPE
-    (lambda (out)
-      (fprintf out "HELLO FROM THE OPEN MAPPING SERVICE~n")
-      )))
+  (aff_blank_graph))
+  ;(response/output
+    ;#:mime-type TEXT/HTML-MIME-TYPE
+    ;(lambda (out)
+      ;(fprintf out "HELLO FROM THE OPEN MAPPING SERVICE~n")
+      ;)))
 
 ;; An example of a page returning HTML with xexprs and macros
 (define (display-page req)
