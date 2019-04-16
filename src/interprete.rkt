@@ -6,7 +6,7 @@
 
 (require "conv_xml.rkt")
 (require "qu3.rkt")
-;(require "svg.rkt")
+(require "svg.rkt")
 (require xml)
 (require web-server/servlet)
 
@@ -17,8 +17,6 @@
 ;en attendant d'avoir la fonction qui renvoie du response/xexpr
 ;avec le chemin demandé
 (define (aff_graph argue)
-;let les coordonnées min et max du graphe général
-;afficher le graphe général en noir et le graphe spécifique en rouge avec les min et max du général
   (create_html_responses "OPEN MAPPING SERVICE REAL DISPLAY PAGE" "800" "800" data argue (roam-bounds t) "black" "red")
 )
 

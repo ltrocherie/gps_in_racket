@@ -106,9 +106,20 @@
 
 ;(find_way_fct 1 1 '(2 4) 5 '((1 (0 1) (2 4)) (2 (2 3)(1 3 4)) (3 (2 1) (2 5)) (4 (1 2) (1 2 5)) (5 (2 5) (3 4))) '((1 0 1)))
 
-(define (find_way beg end l)
+(define (find_way1 beg end l)
   (find_way_fct beg beg (caddr (assoc beg l)) end l (list (list beg 0 beg))))
+;(define (find_way2 beg end l)
   ;(list (cadr (assoc end (find_way_fct beg beg (caddr (assoc beg l)) end l (list (list beg 0 beg))))) (reverse (map car (find_way_fct beg beg (caddr (assoc beg l)) end l (list (list beg 0 beg)))))))
 
-;(find_way 1 5 '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2) (1 2 5)) (5 (2 5) (2 4))))
+(define (extract-way djk src dst)
+  (if (= src dst)
+      (list src)
+      (append (extract-way djk src (caddr (assoc dst djk))) (list dst))))
+
+(define (find_way beg end l)
+  (list (cadr (assoc end (find_way_fct beg beg (caddr (assoc beg l)) end l (list (list beg 0 beg))))) (extract-way (find_way1 beg end l) beg end)))
+
+(find_way1 1 5 '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2) (1 2 5)) (5 (2 5) (2 4))))
+;(find_way2 1 5 '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2) (1 2 5)) (5 (2 5) (2 4))))
+(find_way 1 5 '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2) (1 2 5)) (5 (2 5) (2 4))))
 ;PAS ENCORE LE MEILLEUR CHEMIN, REVOIR FIND_WAY_FCT  
