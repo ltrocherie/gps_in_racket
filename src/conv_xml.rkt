@@ -1,7 +1,7 @@
 #lang racket
 (require xml)
 
-(provide append-succs roam-node roam-way roam-bounds voisins append-succs)
+(provide append-succs roam-node roam-way roam-bounds voisins append-succs highway? highway-list?)
 
 ;prend un morceau osm contenant id lat et long et renvoie le triplet de nombres correspondant
 (define (create-node l) (list (extract-tag 'id (car l)) (extract-tag 'lat (car l)) (extract-tag 'lon (car l))))
@@ -40,9 +40,13 @@
 
 ;;teste si la way privée de son symbole et de son id est une highway
 (define (highway-list? w)
-  (if (and (list? (car w)) (tag? 'tag (car w)))
-      (highway-tag? (car w))
-      (highway-list? (cdr w)))
+  (if (null? w)
+      #f
+      (if (and (list? (car w)) (tag? 'tag (car w)))
+          (if (highway-tag? (car w))
+              #t
+              (highway-list? (cdr w)))
+          (highway-list? (cdr w))))
   )
 
 ;;teste si la way est une highway
