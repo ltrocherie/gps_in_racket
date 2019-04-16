@@ -6,6 +6,7 @@
 
 (require "conv_xml.rkt")
 (require "qu3.rkt")
+(require "question2.rkt")
 (require "svg.rkt")
 (require xml)
 (require web-server/servlet)
@@ -34,7 +35,7 @@
            (fprintf out "Disconnected Universe Error~n")
            ));renvoie l'erreur demandée
         ;(aff_graph (shapeshift (cdr findwei)))
-        (aff_graph (cdr findwei)) ;maintenant le cdr est sous la forme graph
+        (aff_graph (cadr findwei)) ;maintenant le cdr est sous la forme graph
         )))
 
 ;cherche le chemin le plus court entre start et end
@@ -75,4 +76,4 @@
 (define t (xml->xexpr (document-element
                        (read-xml (open-input-file (command-line #:args (filename) filename))))))
                        ;(read-xml (open-input-file "./maps/forrest-testloop.osm")))))
-(define data (append-succs (roam-node t) (roam-way t)))
+(define data (graph_without_nodes_deg0&2_nodes (append-succs (roam-node t) (roam-way t))))
