@@ -10,10 +10,10 @@
 (require web-server/http/request-structs)
 
 
-(define t (xml->xexpr (document-element
-                       (read-xml (open-input-file "../maps/forrest.osm")))))
-
-(define data (append-succs (roam-node t) (roam-way t)))
+;(define t (xml->xexpr (document-element
+ ;                      (read-xml (open-input-file "../maps/forrest.osm")))))
+;
+;(define data (append-succs (roam-node t) (roam-way t)))
 ;(roam-bounds t)
 ;graphes de test
 ;(define graph '((1127169432 (48.583211 4.9665652) (4899402261))
@@ -116,7 +116,7 @@
   (list 'html
         (list 'head (list 'title title))
         (list 'body (create-svg2 width height graph1 graph2 bounds color1 color2))))
-(create_html_response "OPEN MAPPING SERVICE DISPLAY PAGE" "800" "800" data (roam-bounds t) "blue")
+;(create_html_response "OPEN MAPPING SERVICE DISPLAY PAGE" "800" "800" data (roam-bounds t) "blue")
 
 ;test
 ;(define (display-page req)
