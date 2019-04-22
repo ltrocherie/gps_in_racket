@@ -1,6 +1,6 @@
 #lang racket
 (require xml)
-
+(provide graph_without_nodes_deg0&2_nodes)
 
 ;;Precond: n1 et n2 noeuds voisins et n1 de degre 2
 ;;Postcond: n2 avec voisin modifiés
@@ -10,6 +10,7 @@
   (append (list (car n2) (cadr n2))
           (list (cons (cadr (caddr n1)) (remove (car n1) (caddr n2))))))
 
+(manage_node '(5 (0.1 6) (1 4)) '(1 (2 8) (9 5 6)))
 
 ;;Precond: node un noeud de degre 2 et l une liste de noeuds
 ;;Postcond: l une liste de neouds
@@ -57,12 +58,11 @@
 ;;Postcond: une liste de noeuds
 ;;Action: enleve de "liste" tous les noeuds de degree 2 en ayant de soin de bien traiter d'abord les voisins de ceux-ci
 ;;exemple: (remove_nodes_deg2 '((1 (1 5) (2)) (3 (0.7 4) (2 4 7)) (4 (11 0.9) (3 5 9)) (7 (6 4) (6 3)) (5 (1 8.0) (4 6)) (6 (12 45) (5 7)) (2 (3 0) (1 3)))
-;;                            '((1 (1 5) (2)) (7 (6 4) (6 3)) (5 (1 8.0) (4 6)) (6 (12 45) (5 7)) (2 (3 0) (1 3))) --> '((3 (0.7 4) (1 6 4)) (1 (1 5) (3)) (4 (11 0.9) (6 3 9)))
+;;                            '((7 (6 4) (6 3)) (5 (1 8.0) (4 6)) (6 (12 45) (5 7)) (2 (3 0) (1 3))) --> '((3 (0.7 4) (1 6 4)) (1 (1 5) (3)) (4 (11 0.9) (6 3 9)))
 (define (remove_nodes_deg2 liste nodes_deg2_liste)
   (if (null? nodes_deg2_liste)
       liste
-      (remove_nodes_deg2 (concat_neighbourS (car nodes_deg2_liste) (remove (assoc (caar nodes_deg2_liste) liste) liste))
-                         ((nodes_deg2 (concat_neighbourS (car nodes_deg2_liste) (remove (assoc (caar nodes_deg2_liste) liste) liste)))))))
+      (remove_nodes_deg2 (concat_neighbourS (car nodes_deg2_liste) (remove (assoc (caar nodes_deg2_liste) liste) liste)) (nodes_deg2 (concat_neighbourS (car nodes_deg2_liste) (remove (assoc (caar nodes_deg2_liste) liste) liste))))))
 ;;Precond: node un noeud
 ;;Postcond: un bouleen
 ;;Action: retourne #t si node est de degre0 et #f sinon
@@ -93,7 +93,4 @@
                         ;;--> '((3 (0.7 4) (1 6 4)) (1 (1 5) (3)) (4 (11 0.9) (6 3 9)))
 (define (graph_without_nodes_deg0&2_nodes l)
   (remove_nodes_deg0 (remove_nodes_deg2 l (nodes_deg2 l))))
-
-(provide graph_without_nodes_deg0&2_nodes)
-
 

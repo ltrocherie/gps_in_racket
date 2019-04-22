@@ -94,4 +94,4 @@
 (define t (xml->xexpr (document-element
                        (read-xml (open-input-file (command-line #:args (filename) filename))))))
                        ;(read-xml (open-input-file "./maps/forrest-testloop.osm")))))
-(define data (append-succs (roam-node t) (roam-way t)))
+(define data (graph_without_nodes_deg0&2_nodes(append-succs (roam-node t) (roam-way t))))
