@@ -1,5 +1,6 @@
 #lang racket
 (require xml)
+(require "graph.rkt")
 (provide graph_without_nodes_deg0&2_nodes)
 
 ;;Precond: n1 et n2 noeuds voisins et n1 de degre 2
@@ -30,16 +31,6 @@
                     (concat_neighbour node l)))
 
 
-;;Precond: node un noeud
-;;Postcond: un bouleen
-;;Action: retourne #t si node est de degre2 et #f sinon
-;;exemple: (is_deg2 '(5 (0.1 6) (1 4))) --> #t et (is_deg2 '(5 (0.1 6) (1 4))) --> #f
-(define (is_deg2? node)
-  (if (= (length (caddr node)) 2)
-      #t
-      #f))
-
-
 ;;Precons: une liste de noeuds
 ;;Postcond: une liste de noeuds
 ;;Action: retourne la liste de tous les noeuds de degree 2 contenues dans la liste en entree
@@ -61,20 +52,12 @@
   (if (null? nodes_deg2_liste)
       liste
       (remove_nodes_deg2 (concat_neighbourS (car nodes_deg2_liste) (remove (assoc (caar nodes_deg2_liste) liste) liste)) (nodes_deg2 (concat_neighbourS (car nodes_deg2_liste) (remove (assoc (caar nodes_deg2_liste) liste) liste))))))
-;;Precond: node un noeud
-;;Postcond: un bouleen
-;;Action: retourne #t si node est de degre0 et #f sinon
-;;exemple: (is_deg2 '(5 (0.1 6) ())) --> #t et (is_deg2 '(5 (0.1 6) (1 4))) --> #f
-(define (is_deg0? node)
-  (if (= (length (caddr node)) 0)
-      #t
-      #f))
 
 
 ;;Precond: une liste representant la structure graphe
 ;;Poscond: une liste representant la structure graphe
 ;;Action: retire tous les noeuds de degre 0
-;;exemple: (remove_nodes_deg0 '((1 (1 5) ()) (3 (0.7 4) (2 4 7)))) --> ((1 (1 5) ()))
+;;exemple: (remove_nodes_deg0 '((1 (1 5) ()) (3 (0.7 4) (2 4 7)))) --> ((3 (0.7 4) (2 4 7)))
 (define (remove_nodes_deg0 liste)
   (if (null? liste)
       '()
@@ -91,4 +74,3 @@
                         ;;--> '((3 (0.7 4) (1 6 4)) (1 (1 5) (3)) (4 (11 0.9) (6 3 9)))
 (define (graph_without_nodes_deg0&2_nodes l)
   (remove_nodes_deg0 (remove_nodes_deg2 l (nodes_deg2 l))))
-
