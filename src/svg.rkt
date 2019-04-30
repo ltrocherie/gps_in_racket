@@ -40,7 +40,7 @@
 ;;POSTCOND: la meme liste de coordonnees
 ;;Action: converti la liste de coordonnees en entree de sorte à les agrandir en tenant compte des valeurs max et min des bornes lat et long
 (define (coord_convertion coord bounds)
-  (list (* (/ (- (car coord) (caar bounds)) (- (cdar bounds) (caar bounds))) 800) (* (/ (- (cadr coord) (caadr bounds)) (- (cdadr bounds) (caadr bounds))) 800)))  
+  (list (* (/ (- (car coord) (caar bounds)) (* (- (cdar bounds) (caar bounds)))) 800) (* (/ (- (cadr coord) (caadr bounds)) (- (cdadr bounds) (caadr bounds))) 800)))  
 
 
 ;;PRECOND: node un noeud du graph tel specifié
@@ -83,7 +83,7 @@
 (define (paths-from-a-node node-with-coord color)
   (if (null? (cadr node-with-coord))
       '()
-      (cons (list 'path (list (list 'd (node-string (car node-with-coord) (caadr node-with-coord))) (list 'stroke color)))
+      (cons (list 'path (list (list 'd (node-string (car node-with-coord) (caadr node-with-coord))) (list 'stroke color) (list 'stroke-width "2")))
             (paths-from-a-node (append (list (car node-with-coord)) (list (remove (caadr node-with-coord) (cadr node-with-coord)))) color))))
 
 
