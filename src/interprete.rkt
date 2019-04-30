@@ -4,6 +4,7 @@
 ;il est l'intermédiaire entre l'algo de recherche de chemin et les fonctions
 ;d'affichage graphique SVG
 
+(require "graph.rkt")
 (require "conv_xml.rkt")
 (require "qu3.rkt")
 (require "question2.rkt")
@@ -27,17 +28,6 @@
   (response/xexpr (create_html_response "OPEN MAPPING SERVICE REAL DISPLAY PAGE" "800" "800" data (roam-bounds t) "black"))
 )
 
-(define (vertex-new id coord neigh)
-  (list id coord neigh))
-
-(define (follower i l)
-  (let ((res (member i l)))
-    (if (null? (cdr res))
-        '()
-        (list (cadr res)))))
-
-(define (conv-graph l g)
-  (map (lambda (n) (vertex-new n (cadr (assoc n g)) (follower n l))) l))
 
 ;cherche un chemin entre les points start et end
 ;si le chemin existe, elle renvoie un response/xexpr avec le code HTML SVG
@@ -79,17 +69,6 @@
 ;soit le message d'erreur
 (define (cycle nodes)
   #t);à finir
-
-;transforme une liste d'ID en liste de (coordonnées ((coordonnées du suivant)))
-(define (shapeshift l)
-  (if (null? l)
-      l
-      (if (null? (cdr l))
-          (cdr l)
-          (cons (list (search-cord (car l) data) (list (search-cord (cadr l) data))) (shapeshift (cdr l)))
-          )
-      )
-  )
 
 (define t (xml->xexpr (document-element
                        (read-xml (open-input-file (command-line #:args (filename) filename))))))
