@@ -4,13 +4,12 @@
 (require xml)
 
 (define l '(
-   (nd ((ref "2097959544")))
-   "\n    "
-   (nd ((ref "515330686")))
-   "\n    "
-   (tag ((k "highway") (v "tertiary")))
-   "\n  "))
-
+            (nd ((ref "2097959544")))
+            "\n    "
+            (nd ((ref "515330686")))
+            "\n    "
+            (tag ((k "highway") (v "tertiary")))
+            "\n  "))
 (define w1 '(way
              ((id "199797372"))
              "\n    "
@@ -119,7 +118,7 @@
              (tag ((k "highway")
                    (v "cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2013")))
              "\n ")
-)
+  )
 
 (define n1 '(nd ((ref "2097959544"))))
 (define n2 '(nd ((ref "515330686"))))
@@ -128,76 +127,102 @@
                        (read-xml (open-input-file (or "maps/projMapping.osm" "maps/projMapping.osm"))))))
 
 (define fr (xml->xexpr (document-element
-                       (read-xml (open-input-file (or "maps/forrest.osm" "maps/forrest.osm"))))))
+                        (read-xml (open-input-file (or "maps/1_forrest.osm" "maps/1_forrest.osm"))))))
 
 (define lm (xml->xexpr (document-element
-                       (read-xml (open-input-file "maps/1_lm.osm")))))
+                        (read-xml (open-input-file "maps/1_lm.osm")))))
 
 (define a (xml->xexpr (document-element
                        (read-xml (open-input-file "maps/abeille.osm")))))
 
 
-(printf "#########################################################################################\n")
-(highway? w3)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Test de l'ouverture d'un fichier ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(printf "#########################################################################################\n")
-(printf "Test de l'ouverture d'un fichier xml basique\n")
-;(xml->xexpr (document-element (read-xml (open-input-file (or "maps/projMapping.osm" "work/maps/projMapping.osm")))))
-
-(printf "Test de l'ouverture d'un fichier xml complexe\n")
-;(xml->xexpr (document-element (read-xml (open-input-file (or "maps/forrest.osm" "work/maps/forrest.osm")))))
-;a
+(define (main)
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Test de l'ouverture d'un fichier ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (printf "#######################\n")
+  (printf "Test de l'ouverture d'un fichier xml basique : ")
+  (xml->xexpr (document-element (read-xml (open-input-file (or "maps/projMapping.osm" "work/maps/projMapping.osm")))))
+  (printf "OK\n")
+  (printf "Test de l'ouverture d'un fichier xml complexe : ")
+  (xml->xexpr (document-element (read-xml (open-input-file (or "maps/1_forrest.osm" "work/maps/1_forrest.osm")))))
+  (printf "OK\n")
              
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Test de roam-node ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(printf "#########################################################################################\n")
-(printf "Test de roam-node sur projMapping.osm\n")
-;(roam-node t)
-(printf "Test de roam-node sur forrest.osm\n")
-;(roam-node fr)
-(printf "Test de roam-node sur lm.osm\n")
-;(roam-node a)
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Test de roam-node ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (printf "#######################\n")
+  (printf "Test de roam-node sur projMapping.osm : ")
+  (roam-node t)
+  (printf "OK\n")
+  (printf "Test de roam-node sur forrest.osm : ")
+  (roam-node fr)
+  (printf "OK\n")
+  (printf "Test de roam-node sur lm.osm : ")
+  (roam-node a)
+  (printf "OK\n")
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Test de roam-way ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(printf "#########################################################################################\n")
-(printf "Test de roam-way sur projMapping.osm\n")
-(roam-way t)
-(printf "Test de roam-way sur forrest.osm\n")
-(roam-way fr)
-(printf "Test de roam-way sur lm.osm\n")
-(roam-way lm)
-(printf "Test de roam-way sur abeille.osm\n")
-(roam-way a)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Test de roam-bounds ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(printf "#########################################################################################\n")
-(printf "Test de roam-bounds sur projMapping.osm\n")
-;(roam-bounds t)
-(printf "Test de roam-bounds sur forrest.osm\n")
-;(roam-bounds fr)
-(printf "Test de roam-bounds sur lm.osm\n")
-;(roam-bounds a)
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Test de roam-way ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (printf "#######################\n")
+  (printf "Test de roam-way sur projMapping.osm : ")
+  (roam-way t)
+  (printf "OK\n")
+  (printf "Test de roam-way sur forrest.osm : ")
+  (roam-way fr)
+  (printf "OK\n")
+  (printf "Test de roam-way sur lm.osm : ")
+  (roam-way lm)
+  (printf "OK\n")
+  (printf "Test de roam-way sur abeille.osm : ")
+  (roam-way a)
+  (printf "OK\n")
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Test de append-succs ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(printf "#########################################################################################\n")
-(printf "Test de append-succ sur un fichier osm simple\n")
-;(append-succs (roam-node t) (roam-way t))
-(printf "Test de append-succ sur forrest.osm\n")
-;(append-succs (roam-node fr) (roam-way fr))
-(printf "Test de append-succ sur lm.osm\n")
-;(append-succs (roam-node a) (roam-way a))
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Test de roam-bounds ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (printf "#######################\n")
+  (printf "Test de roam-bounds sur projMapping.osm : ")
+  (roam-bounds t)
+  (printf "OK\n")
+  (printf "Test de roam-bounds sur forrest.osm : ")
+  (roam-bounds fr)
+  (printf "OK\n")
+  (printf "Test de roam-bounds sur lm.osm : ")
+  (roam-bounds a)
+  (printf "OK\n")
 
-;(printf "Test de append-succ sur abeille.osm\n")
-;(append-succs (roam-node a) (roam-way a))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Test de append-succs ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (printf "#######################\n")
+  (printf "Test de append-succ sur un fichier osm simple : ")
+  (append-succs (roam-node t) (roam-way t))
+  (printf "OK\n")
+  (printf "Test de append-succ sur forrest.osm : ")
+  (append-succs (roam-node fr) (roam-way fr))
+  (printf "OK\n")
+  (printf "Test de append-succ sur lm.osm : ")
+  (append-succs (roam-node a) (roam-way a))
+  (printf "OK\n")
+
+  (printf "Test de append-succ sur abeille.osm : ")
+  (append-succs (roam-node a) (roam-way a))
+  (printf "OK\n")
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Test de voisins ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(printf "#########################################################################################\n")
-(printf "Test de voisins\n")
-;(voisins '(1124048441 356 286) (roam-way t))
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Test de voisins ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (printf "#######################\n")
+  (printf "Test de voisins : ")
+  (voisins '(1124048441 356 286) (roam-way t))
+  (printf "OK\n")
 
-(printf "Test de graph_without_nodes_deg0&2\n")
-;(graph_without_nodes_deg0&2_nodes (append-succs (roam-node t) (roam-way t)))
+  (printf "Test de graph_without_nodes_deg0&2 : ")
+  (graph_without_nodes_deg0&2_nodes (append-succs (roam-node t) (roam-way t)))
+  (printf "OK\n")
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Test de highway ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (printf "#######################\n")
+  (printf "Test de highway? : ")
+  (highway? w3)
+  (printf "OK\n")
+
+(void))
+
+(main)
+
+
