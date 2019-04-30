@@ -10,8 +10,6 @@
   (append (list (car n2) (cadr n2))
           (list (cons (cadr (caddr n1)) (remove (car n1) (caddr n2))))))
 
-(manage_node '(5 (0.1 6) (1 4)) '(1 (2 8) (9 5 6)))
-
 ;;Precond: node un noeud de degre 2 et l une liste de noeuds
 ;;Postcond: l une liste de neouds
 ;;Action: applique manage_node au premier voisin de node qui serait dans l
