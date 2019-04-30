@@ -130,8 +130,11 @@
 (define fr (xml->xexpr (document-element
                        (read-xml (open-input-file (or "maps/forrest.osm" "maps/forrest.osm"))))))
 
+(define lm (xml->xexpr (document-element
+                       (read-xml (open-input-file "maps/1_lm.osm")))))
+
 (define a (xml->xexpr (document-element
-                       (read-xml (open-input-file "maps/lm.osm")))))
+                       (read-xml (open-input-file "maps/abeille.osm")))))
 
 
 (printf "#########################################################################################\n")
@@ -163,6 +166,8 @@
 (printf "Test de roam-way sur forrest.osm\n")
 (roam-way fr)
 (printf "Test de roam-way sur lm.osm\n")
+(roam-way lm)
+(printf "Test de roam-way sur abeille.osm\n")
 (roam-way a)
 
 
