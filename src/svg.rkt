@@ -5,36 +5,11 @@
 (provide create_html_responses)
 (require xml)
 (require "conv_xml.rkt")
+(require "graph.rkt")
 (require web-server/servlet
          web-server/servlet-env)
 (require web-server/http/request-structs)
 
-
-;(define t (xml->xexpr (document-element
- ;                      (read-xml (open-input-file "../maps/forrest.osm")))))
-;
-;(define data (append-succs (roam-node t) (roam-way t)))
-;(roam-bounds t)
-;graphes de test
-;(define graph '((1127169432 (48.583211 4.9665652) (4899402261))
- ; (4899402261 (48.583807 4.9699008) (1127169432 1127169402 4899402262))
-  ;;(1127169383 (48.5830057 4.9665204) (4899402262))
-  ;(4899402262 (48.5817725 4.9692631) (1127169383 1124048389 4899402261 1079892828))
-  ;(1127169402 (48.5864335 5.0285572) (4899402261))
-  ;(1124048389 (48.5643736 5.0088522) (4899402262))
-  ;(1079892828 (48.5773455 4.9694463) (4899402262))))
-
-
-
-;;PRECOND: id un identifiant de noeaud, id>=0 et graph tq (is_graph? graph) --> #t
-;;POSTCOND: valeur de retour, une liste de coordonnees
-;;Action retourne les coordonnees du noeud d'identifiant id contenu dans graph
-;;exemple: (search-cord 4899402262 graph) --> (48.5817725 4.9692631)
-(define (search-cord id graph)
-  (if (equal? (assoc id graph) #f)
-      (printf "No corresponding node in the graph for this id")
-      (cadr (assoc id graph))))
-  
 
 ;;PRECOND: coord une liste de coordonnees de noeud respectivement avec lat et long, bounds une paire pointee comme ( (minlat . maxlat).(minlong . maxlong) )
 ;;POSTCOND: la meme liste de coordonnees
@@ -94,10 +69,13 @@
       '()
       (append (paths-from-a-node (car graph) color) (paths-from-all-nodes (cdr graph) color))))
 
-(define (create-svg width height graph bounds color)
-  (append (list 'svg (list (list 'width width) (list 'height height))) (paths-from-all-nodes (arc-with-cord->graph graph bounds) color)))
 
 ;;realise le cops du svg pour le graphe fournie en entree. width et heigh taille de la fenêtre souhaitée et bounds definie plus haut
+(define (create-svg width height graph bounds color)
+  (append (list 'svg (list (list 'width width) (list 'height height) (list 'style "margin:auto"))) (paths-from-all-nodes (arc-with-cord->graph graph bounds) color)))
+
+
+;;realise le cops du svg pour deux graphes en entrée l'un sur l'autre avec des couleurs differentes. Permet d'illustrer un chemin sur le map
 (define (create-svg2 width height graph1 graph2 bounds color1 color2)
   (append (list 'svg (list (list 'width width) (list 'height height))) (paths-from-all-nodes (arc-with-cord->graph graph1 bounds) color1) (paths-from-all-nodes (arc-with-cord->graph graph2 bounds) color2)))
 
@@ -112,16 +90,9 @@
 
 ;;dans le meme format que la premiere mais prend en parametre 2 graphes
 ;;cette fonction permet d'afficher le map en une couleur pour un itinéraire au dessus en une autre couleur
+;;Exemple : ;(create_html_response "OPEN MAPPING SERVICE DISPLAY PAGE" "800" "800" data (roam-bounds t) "blue")
 (define (create_html_responses title width height graph1 graph2 bounds color1 color2)
   (list 'html
         (list 'head (list 'title title))
         (list 'body (create-svg2 width height graph1 graph2 bounds color1 color2))))
-;(create_html_response "OPEN MAPPING SERVICE DISPLAY PAGE" "800" "800" data (roam-bounds t) "blue")
 
-;test
-;(define (display-page req)
- ; (response/xexpr (create_html_response "OPEN MAPPING SERVICE DISPLAY PAGE" "800" "800" data (roam-bounds t) "blue")))
-;(serve/servlet display-page
-     ;          #:servlet-regexp #rx""
-    ;           #:port 9000
-   ;            #:launch-browser? #t)
