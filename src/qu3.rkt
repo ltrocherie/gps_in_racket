@@ -1,6 +1,10 @@
 #lang racket
 
-(provide find_way_djk)
+;(provide find)
+;(provide first-ways)
+;(provide extract)
+;(provide djk-inter)
+(provide dijkstra)
 
 ;renvoie le carré de x
 (define (square x)
@@ -23,7 +27,7 @@
       (or (is_in_list (car l) (cdr l)) (occ (cdr l)))))
 
 ;(occ '(15 3 5 3))
-;(occ '(15 8 3 5))
+;(oc1127169383c '(15 8 3 5))
 ;(occ '())
 
 
@@ -179,8 +183,48 @@
 (define (find_way_djk beg end l)
   (extract_way (find_way_fct beg end l (list (list beg 0 beg))) beg end 0))
 
-;(let ([l '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2) (1 2 5)) (5 (2 5) (2 4)))])
-;(find_way_djk 1 5 l))
+;(define l '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2) (1 2 5)) (5 (2 5) (2 4))))
+;(find_way_djk 1 10 l)
+;(find_way_djk 1 5 l)
+;(find_way_fct 1 5 l '((1 0 1)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;TMP
+(define (find beg end data prev)
+  (if (= (caar prev) end)
+      prev
+      (find beg end data (cons (next prev
+            data
+            (list (car (nearest (caar prev)
+                                (remq (caddar prev) (caddr (assoc (caar prev) data)))
+                                data
+                                (car (caddr (assoc (caar prev) data)))))
+                  (+ (cadar prev)
+                     (cadr (nearest (caar prev) (remq (caddar prev) (caddr (assoc (caar prev) data)))
+                                    data
+                                    (car (caddr (assoc (caar prev) data))))))
+                  (caar prev))
+            (cadar prev)
+            (nodes prev '())) prev))))
+
+
+(define (first-ways l)
+  (list (caar l) (caddar l)))
+
+(define (extract first-way l)
+  (if (null? (cdr l))
+      (append first-way (list (caar l)))
+      (if ( = (cadr first-way) (caar l))
+          (extract (append first-way (cddar l)) (cdr l))
+          (extract first-way (cdr l)))))
+
+;;l is the return of find
+(define (djk-inter beg end l)
+  (list (cadar l) (reverse (extract (first-ways l) (cdr l)))))
+
+(define (dijkstra beg end data)
+  (djk-inter beg end (find beg end data (list (list beg 0 beg)))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;END TMP
 
 
 ;doit renvoyer '() si les points sont déconnectés ou si les points n'existent pas

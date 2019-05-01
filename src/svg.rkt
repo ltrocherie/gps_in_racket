@@ -72,12 +72,17 @@
 
 ;;realise le cops du svg pour le graphe fournie en entree. width et heigh taille de la fenêtre souhaitée et bounds definie plus haut
 (define (create-svg width height graph bounds color)
-  (append (list 'svg (list (list 'width width) (list 'height height) (list 'style "margin:auto"))) (paths-from-all-nodes (arc-with-cord->graph graph bounds) color)))
+  (append (list 'div (list (list 'style "text-align:center")))
+          (list (append (list 'svg (list (list 'width width) (list 'height height)))
+                        (paths-from-all-nodes (arc-with-cord->graph graph bounds) color)))))
 
 
 ;;realise le cops du svg pour deux graphes en entrée l'un sur l'autre avec des couleurs differentes. Permet d'illustrer un chemin sur le map
 (define (create-svg2 width height graph1 graph2 bounds color1 color2)
-  (append (list 'svg (list (list 'width width) (list 'height height))) (paths-from-all-nodes (arc-with-cord->graph graph1 bounds) color1) (paths-from-all-nodes (arc-with-cord->graph graph2 bounds) color2)))
+  (append (list 'div (list (list 'style "text-align:center")))
+          (list (append (list 'svg (list (list 'width width) (list 'height height)))
+                  (paths-from-all-nodes (arc-with-cord->graph graph1 bounds) color1)
+                  (paths-from-all-nodes (arc-with-cord->graph graph2 bounds) color2)))))
 
 
 ;;realise le format hml
@@ -85,7 +90,7 @@
 (define (create_html_response title width height graph bounds color)
   (list 'html
         (list 'head (list 'title title))
-        (list 'body (create-svg width height graph bounds color))))
+        (list 'body (list 'h1 title) (create-svg width height graph bounds color))))
 
 
 ;;dans le meme format que la premiere mais prend en parametre 2 graphes
@@ -94,5 +99,4 @@
 (define (create_html_responses title width height graph1 graph2 bounds color1 color2)
   (list 'html
         (list 'head (list 'title title))
-        (list 'body (create-svg2 width height graph1 graph2 bounds color1 color2))))
-
+        (list 'body (list 'h1 title) (create-svg2 width height graph1 graph2 bounds color1 color2))))
