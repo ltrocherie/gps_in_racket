@@ -125,8 +125,8 @@
 ;nodes=(nodes previous '())
 (define (next previous l res last_dist nodes)
   (if (null? previous)
-      (if (is_in_list res previous)
-          #f
+      (if (is_in_list (car res) nodes)
+          '()
           res)
       (let ([pot_succ (remq* nodes (caddr (assoc (caar previous) l)))])
         ;(display (caar previous))
@@ -144,12 +144,13 @@
                   ;(display "plus de succ pos")
                   (next (cdr previous) l res last_dist nodes)))))
 ;tests
-;(let ([l '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2 5) (1 2)) (5 (2 5) (2 4)))])
-;  (next '((1 0 1)) l (list (car (nearest 1 (remq 1 (caddr (assoc 1 l))) l (car (remq 1 (caddr (assoc 1 l)))))) (+ 0 (cadr (nearest 1 (remq 1 (caddr (assoc 1 l))) l (car (remq 1 (caddr (assoc 1 l))))))) 1) 0))
-;(let ([l '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2 5) (1 2)) (5 (2 5) (2 4)))])
+;(let ([l '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2) (1 2 5)) (5 (2 5) (2 4)))])
 ;  (next '((4 1.42 1) (1 0 1)) l (list (car (nearest 4 (remq 1 (caddr (assoc 4 l))) l (car (remq 1 (caddr (assoc 4 l)))))) (+ 1.42 (cadr (nearest 4 (remq 1 (caddr (assoc 4 l))) l (car (remq 1 (caddr (assoc 4 l))))))) 4) 1.42))
-;(let ([l '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2 5) (1 2)) (5 (2 5) (2 4)))])
+;(let ([l '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2) (1 2 5)) (5 (2 5) (2 4)))])
 ;  (next '((3 2 1) (4 1.42 1) (1 0 1)) l (list (car (nearest 3 (remq 1 (caddr (assoc 3 l))) l (car (remq 1 (caddr (assoc 3 l)))))) (+ 2 (cadr (nearest 3 (remq 1 (caddr (assoc 3 l))) l (car (remq 1 (caddr (assoc 3 l))))))) 3) 2))
+;(let ([l '((1 (0 0) (2 3)) (2 (2 0) (1 3)) (3 (2 2) (2 1)) (4 (0 2) ()))]
+;      [previous '((3 2.84 1) (2 2 1) (1 0 1))])
+;  (next previous l (list (car (nearest 3 (remq 1 (caddr (assoc 3 l))) l (car (remq 1 (caddr (assoc 3 l)))))) (+ 2 (cadr (nearest 3 (remq 1 (caddr (assoc 3 l))) l (car (remq 1 (caddr (assoc 3 l))))))) 3) 2 (nodes previous '())))
 ;(display "OK")
 ;
 
@@ -163,8 +164,11 @@
       (let ([res (list (car (nearest (caar previous) (remq (caddar previous) (caddr (assoc (caar previous) l))) l (car (remq (caddar previous) (caddr (assoc (caar previous) l))))))
           (+ (cadar previous) (cadr (nearest (caar previous) (remq (caddar previous) (caddr (assoc (caar previous) l))) l
                                              (car (remq (caddar previous) (caddr (assoc (caar previous) l))))))) (caar previous))])
-        (find_way_fct beg end l (cons (next previous l res (cadar previous) (nodes previous '())) previous)))))
+        (if (null? (next previous l res (cadar previous) (nodes previous '())))
+            '()
+            (find_way_fct beg end l (cons (next previous l res (cadar previous) (nodes previous '())) previous))))))
            
+;(find_way_fct 1 6 '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2) (1 2 5)) (5 (2 5) (2 4))) '((1 0 1)))
 ;(find_way_fct 1 5 '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2) (1 2 5)) (5 (2 5) (2 4))) '((1 0 1)))
 ;(display 4)
 ;(define (find_way1 beg end l)
@@ -176,18 +180,21 @@
 (define (extract_way djk beg end dist)
   (if (= beg end)
       (list beg)
-      (if (> (cadr (assoc end djk)) dist)
-          (list (cadr (assoc end djk)) (append (extract_way djk beg (caddr (assoc end djk)) (cadr (assoc end djk))) (list end) ))
-          (append (extract_way djk beg (caddr (assoc end djk)) dist) (list end)))))
+      (if (is_in_list2 end djk)
+          (if (> (cadr (assoc end djk)) dist)
+              (list (cadr (assoc end djk)) (append (extract_way djk beg (caddr (assoc end djk)) (cadr (assoc end djk))) (list end) ))
+              (append (extract_way djk beg (caddr (assoc end djk)) dist) (list end)))
+          '())))
 
 (define (find_way_djk beg end l)
-  (extract_way (find_way_fct beg end l (list (list beg 0 beg))) beg end 0))
+  (let ([way (extract_way (find_way_fct beg end l (list (list beg 0 beg))) beg end 0)])
+    (if (null? way)
+        '()
+        way)))
 
 ;(define l '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2) (1 2 5)) (5 (2 5) (2 4))))
 ;(find_way_djk 1 10 l)
 ;(find_way_djk 1 5 l)
-;(find_way_fct 1 5 l '((1 0 1)))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;TMP
 (define (find beg end data prev)
@@ -237,4 +244,3 @@
 ;(find_way1 1 5 '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2) (1 2 5)) (5 (2 5) (2 4))))
 ;(find_way2 1 5 '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2) (1 2 5)) (5 (2 5) (2 4))))
 ;(find_way 1 5 '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2) (1 2 5)) (5 (2 5) (2 4))))
-;PAS ENCORE LE MEILLEUR CHEMIN, REVOIR FIND_WAY_FCT  
