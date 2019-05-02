@@ -1,10 +1,6 @@
 #lang racket
 
-;(provide find)
-;(provide first-ways)
-;(provide extract)
-;(provide djk-inter)
-;(provide dijkstra)
+
 (provide find_way_djk)
 
 ;renvoie le carré de x
@@ -181,7 +177,7 @@
             (find_way_fct beg end l (cons (next previous l res (cadar previous) (nodes previous '())) previous))))))
            
 ;(find_way_fct 1 6 '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2) (1 2 5)) (5 (2 5) (2 4))) '((1 0 1)))
-;(find_way_fct 1 5 '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2) (1 2 5)) (5 (2 5) (2 4))) '((1 0 1)))
+;(find_way_fct 1 5 '((1 (0 1) (4)) (2 (2 3)(3 4 5)) (3 (2 1) (2)) (4 (1 2) (1 5 2)) (5 (2 5) (2 4))) '((1 0 1)))
 ;(display 4)
 ;(define (find_way1 beg end l)
 ;  (find_way_fct beg beg (caddr (assoc beg l)) end l (list (list beg 0 beg))))
@@ -204,27 +200,29 @@
         '()
         way)))
 
-;(define l '((1 (0 1) (3 4)) (2 (2 3)(3 4 5)) (3 (2 1) (2 1)) (4 (1 2) (1 2 5)) (5 (2 5) (2 4))))
+;(define l '((1 (0 1) (4)) (2 (2 3)(3 4)) (3 (2 1) (2 1)) (4 (1 2) (1 5 2)) (5 (2 5) (4))))
 ;(find_way_djk 1 10 l)
 ;(find_way_djk 1 5 l)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;TMP
 (define (find beg end data prev)
+  (if (null? (car prev))
+      '()
   (if (= (caar prev) end)
       prev
       (find beg end data (cons (next prev
             data
             (list (car (nearest (caar prev)
-                                (remq (caddar prev) (caddr (assoc (caar prev) data)))
+                                (caddr (assoc (caar prev) data))
                                 data
                                 (car (caddr (assoc (caar prev) data)))))
                   (+ (cadar prev)
-                     (cadr (nearest (caar prev) (remq (caddar prev) (caddr (assoc (caar prev) data)))
+                     (cadr (nearest (caar prev) (caddr (assoc (caar prev) data))
                                     data
                                     (car (caddr (assoc (caar prev) data))))))
                   (caar prev))
             (cadar prev)
-            (nodes prev '())) prev))))
+            (nodes prev '())) prev)))))
 
 
 (define (first-ways l)

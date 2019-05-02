@@ -35,7 +35,7 @@
 ;sinon, elle affiche le message d'erreur demandé
 (define (route start end)
   ;(let ([onwei (one_way start end data)]);avec one_way la fonction qui trouve le chemin entre start et end à travers data
-  (let ([findwei (dijkstra start end data)]);avec find_way la fonction qui trouve le chemin entre start et end à travers data
+  (let ([findwei (find_way_djk start end data)]);avec find_way la fonction qui trouve le chemin entre start et end à travers data
     (if (null? findwei)
         (response/output
          #:mime-type TEXT/HTML-MIME-TYPE
@@ -51,7 +51,7 @@
 ;renvoie sa distance en response/xexpr avec le code HTML SVG si il existe
 ;renvoie le message d'erreur sinon
 (define (distance start end)
-  (let ([findwei (dijkstra start end data)]);avec find_way la fonction qui trouve le chemin entre start et end à travers data
+  (let ([findwei (find_way_djk start end data)]);avec find_way la fonction qui trouve le chemin entre start et end à travers data
     (if (null? findwei)
         (response/output
          #:mime-type TEXT/HTML-MIME-TYPE
@@ -74,6 +74,6 @@
 
 (define t (xml->xexpr (document-element
                        (read-xml (open-input-file (command-line #:args (filename) filename))))))
-                       ;(read-xml (open-input-file "../maps/abeille.osm")))))
+                       ;(read-xml (open-input-file "../maps/1_lm.osm")))))
 (define data (graph_without_nodes_deg0&2_nodes(append-succs (roam-node t) (roam-way t))))
 
