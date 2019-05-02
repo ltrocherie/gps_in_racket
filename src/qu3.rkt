@@ -4,7 +4,8 @@
 ;(provide first-ways)
 ;(provide extract)
 ;(provide djk-inter)
-(provide dijkstra)
+;(provide dijkstra)
+(provide find_way_djk)
 
 ;renvoie le carré de x
 (define (square x)
@@ -65,13 +66,24 @@
 (define (dist_succ a b l)
   (sqrt (+ (square (- (caadr (assoc a l)) (caadr (assoc b l)))) (square (- (cadadr (assoc a l)) (cadadr (assoc b l)))))))
 
+(define (haversine a b l)
+  (let ([x_a (caadr (assoc a l))]
+        [y_a (cadadr (assoc a l))]
+        [x_b (caadr (assoc b l))]
+        [y_b (cadadr (assoc b l))])
+  (* 12742 (asin (sqrt (+ (square (sin (/ (- (/ (* pi x_a) 180) (/ (* pi x_b) 180)) 2))) (*(cos (/ (* pi x_a) 180)) (cos (/ (* pi x_b) 180)) (square (sin (/ (- (/ (* pi y_a) 180) (/ (* pi y_b) 180)) 2))))))))))
+  
 ;(dist_succ 1 2 '((1 (0 0) (2 3 4)) (2 (5 3) (1 3 4))))
-
+;(let ([lyon '(45.7597 4.8422)]
+;      [paris '(48.8567 2.3508)])
+;  (* 12742 (asin (sqrt (+ (square (sin (/ (- (/ (* pi (car lyon)) 180) (/ (* pi (car paris)) 180)) 2))) (*(cos (/ (* pi (car lyon)) 180)) (cos (/ (* pi (car paris)) 180)) (square (sin (/ (- (/ (* pi (cadr lyon)) 180) (/ (* pi (cadr paris)) 180)) 2))))))))) 
+;normalement égal à 392.2172595594006 km
+    
 ;renvoie le noeud le plus proche de a parmis ses successeurs dans l ainsi que la distance qui les sépare
 ;doit être appelé avec min = (car succ)
 (define (nearest a succ l min)
-  (cond [(null? succ) (list min (dist_succ min a l))]
-        [(< (dist_succ a (car succ) l) (dist_succ a min l)) (nearest a (cdr succ) l (car succ))]
+  (cond [(null? succ) (list min (haversine min a l))]
+        [(< (haversine a (car succ) l) (haversine a min l)) (nearest a (cdr succ) l (car succ))]
         [else (nearest a (cdr succ) l min)]))
 
 ;(nearest 1 '(2 3 4) '((1 (0 0) (2 3 4)) (2 (2 0) (1)) (3 (1 1) (1)) (4 (1 3) (1))) 2)
