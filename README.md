@@ -18,7 +18,7 @@ Taper 'make test' à la racine du projet
 
 ## Utilisation
 
-Lancer le projet avec la commande `racket src/server.rkt maps/forrest.osm` dans le répertoire du projet. Puis, taper dans le navigateur :
+Lancer le projet avec la commande `racket src/server.rkt maps/<my_map>.osm` à la racine de celui-ci pour ouvrir une carte `my_map`. Puis, taper dans un navigateur :
 - http://localhost:9000 : affiche la carte courante avec un conteneur svg.
 - http://localhost:9000/route?start=<id>&end=<id> : affiche l'itinéraire entre les deux points spécifiés par les ids start et end si ils sont dans la même composante connexe, et la phrase Disconnected Universe Error sinon.
 - http://localhost:9000/distance?start=<id>&end=<id> : affiche la distance entre les deux points spécifiés par les ids start et end si ils sont dans la même composante connexe, et la phrase Disconnected Universe Error sinon.
