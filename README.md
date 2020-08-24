@@ -7,10 +7,10 @@ Dans le cadre de ce projet, un ensemble d'algorithmesa été implémenté permet
 ## Auteurs
 
 Ce projet a été réalisé:
-Ducluseau Marc
-Pavia Pierre
-Ouédraogo Sonia
-Trocherie Lucas
+- Ducluseau Marc
+- Pavia Pierre
+- Ouédraogo Sonia
+- Trocherie Lucas
 
 ## Tests
 
